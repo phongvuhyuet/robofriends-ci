@@ -2,7 +2,7 @@ version: 2.1
 jobs:
    build:
      docker:
-       - image: circleci/node:latest
+       - image: circleci/node:16.13-bullseye-browsers-legacy
      steps:
        - checkout
        - run: export NODE_OPTIONS=--openssl-legacy-provider
