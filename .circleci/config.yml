@@ -5,27 +5,28 @@ jobs:
        - image: circleci/node:latest
      steps:
        - checkout
+       - run: export NODE_OPTIONS=--openssl-legacy-provider
+       - restore_cache:
+         key: dependency-cache-{{ checksum "package-lock.json" }}
        - run: npm install
        - run: CI=true npm run build
+       - save_cache:
+          key: dependency-cache-{{ checksum "package-lock.json" }}
+          paths:
+            - ./node_modules
    test:
      docker:
        - image: circleci/node:latest
      steps:
        - checkout
-       - run: npm install
+#        - run: npm install
        - run: npm run test
-   hithere:
-     docker:
-       - image: circleci/node:latest
-     steps:
-       - checkout
-       - run: echo "Hellloooo!"
+ 
 workflows:
   version: 2
   build-test-and-lint:
     jobs:
       - build
-      - hithere
       - test:
           requires:
-            - hithere
+            - build
